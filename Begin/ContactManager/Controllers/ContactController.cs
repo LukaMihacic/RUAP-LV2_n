@@ -1,11 +1,11 @@
 ﻿using ContactManager.Models;
-using ContactManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using ContactManager.Services;
 
 namespace ContactManager.Controllers
 {
@@ -16,11 +16,20 @@ namespace ContactManager.Controllers
         public ContactController()
         {
             this.contactRepository = new ContactRepository();
-        } 
+        }
+
         public Contact[] Get()
         {
-          return this.contactRepository.GetAllContacts();
-    
+            return this.contactRepository.GetAllContacts();
+        }
+
+        public HttpResponseMessage Post(Contact contact)
+        {
+            this.contactRepository.SaveContact(contact);
+
+            var response = Request.CreateResponse<Contact>(System.Net.HttpStatusCode.Created, contact);
+
+            return response;
         }
     }
 }
